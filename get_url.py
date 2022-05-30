@@ -28,7 +28,7 @@ def fetch():
         url = re.findall('codebase="(https://dl\..*?)"', resp)[0]
         filename = re.findall(r'package\b.*?\bname="(.*?)"', resp)[0]
         re.findall('''pattern''', '''string''',)
-        Path('dist').mkdir(exist_ok=Ture)
+        Path('dist').mkdir(exist_ok=True)
         with open('./dist/' + arch, 'w', encoding='utf-8') as f:
             f.write(f'{url}{filename}')
 
