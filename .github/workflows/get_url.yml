@@ -1,0 +1,22 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get URL
+        run: python get_url.py
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: dl
+          build_dir: Dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
