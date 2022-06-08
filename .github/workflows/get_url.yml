@@ -26,7 +26,7 @@ jobs:
           RELEASE_DESC+="
           line break
           test"
-          echo "RELEASE_DESC=\"$RELEASE_DESC\"" >> $GITHUB_ENV
+          echo "RELEASE_DESC=\"$RELEASE_DESC\"" >> "$GITHUB_ENV"
       - name: Update Release
         uses: andelf/nightly-release@main
         env:
@@ -34,8 +34,8 @@ jobs:
         with:
           tag_name: stable_latest
           prerelease: true
-          name: ${{ env.RELEASE_TITLE }}
-          body: ${{ env.RELEASE_DESC }}
+          name: "${{ env.RELEASE_TITLE }}"
+          body: "${{ env.RELEASE_DESC }}"
           files: |
             x64.txt
             x86.txt
