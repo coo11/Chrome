@@ -16,21 +16,17 @@ jobs:
           sha12hex() {
             echo $(base64 -d <<< $1 | od -An -vt x1 | tr -d '\n ')
           }
-          get_link(){
+          processing(){
             body='<?xml version="1.0" encoding="UTF-8"?><request protocol="3.0" version="1.3.23.9" shell_version="1.3.21.103" ismachine="0" sessionid="{3597644B-2952-4F92-AE55-D315F45F80A5}" installsource="ondemandcheckforupdate" requestid="{CD7523AD-A40D-49F4-AEEF-8C114B804658}" dedup="cr"><hw sse="1" sse2="1" sse3="1" ssse3="1" sse41="1" sse42="1" avx="1" physmemory="12582912" /><os platform="win" version="6.3" arch="'$1'" /><app appid="{8A69D345-D564-463C-AFF1-A69D9E530F96}" ap="'$2'"><updatecheck /></app></request>'
             resp=$(curl -sX POST https://tools.google.com/service/update2 -H "Content-Type: application/xml"  -d "$body")
             regex="(https://dl\.google\.com[^\"]+).* run=\"([^\"]+).* Version=\"([^\"]+).* hash=\"([^\"]+)\" hash_sha256=\"([^\"]+)"
-            [[ $resp =~ $regex ]] && echo ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > $1.txt && echo "${BASH_REMATCH[3]},$1:
+            [[ $resp =~ $regex ]] && echo ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > $1.txt && echo "RELEASE_TITLE=${BASH_REMATCH[3]}" >> $GITHUB_ENV && echo "$1:
             sha1: `sha12hex ${BASH_REMATCH[4]}`
             sha256:${BASH_REMATCH[5]}"
           }
-          IFS=',' read -r -a "info" <<< "$(get_link x64 x64-stable-multi-chrome)"
-          RELEASE_TITLE=${info[0]}
-          RELEASE_DESC="${info[1]}"
-          IFS=',' read -r -a "info" <<< "$(get_link x86 -multi-chrome)"
+          RELEASE_DESC="$(processing x64 x64-stable-multi-chrome)"
           RELEASE_DESC+="
-          ${info[1]}"
-          echo "RELEASE_TITLE=$RELEASE_TITLE" >> $GITHUB_ENV
+          $(processing x86 -multi-chrome)"
           echo "RELEASE_DESC=$RELEASE_DESC" >> $GITHUB_ENV
       - name: Update Release
         uses: andelf/nightly-release@main
