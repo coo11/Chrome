@@ -24,10 +24,10 @@ jobs:
             SHA1  : \``sha12hex ${BASH_REMATCH[4]}`\`
             SHA256: \`${BASH_REMATCH[5]}\`"
           }
-          IFS=',' read -r -a info <<< $(processing x64 x64-stable-multi-chrome)
+          IFS=',' read -r -a "info" <<< $(processing x64 x64-stable-multi-chrome)
           RELEASE_TITLE=${info[0]} >> $GITHUB_ENV
           RELEASE_DESC="${info[1]}"
-          IFS=',' read -r -a info <<< $(processing x86 -multi-chrome)
+          IFS=',' read -r -a "info" <<< $(processing x86 -multi-chrome)
           RELEASE_DESC+="
           ${info[1]}"
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
