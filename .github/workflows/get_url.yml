@@ -26,6 +26,7 @@ jobs:
           RELEASE_DESC+="
           line break
           test"
+          echo "$RELEAE_DESC"
           echo "RELEASE_DESC=\"$RELEASE_DESC\"" >> "$GITHUB_ENV"
       - name: Update Release
         uses: andelf/nightly-release@main
