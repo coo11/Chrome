@@ -30,7 +30,7 @@ jobs:
           echo "RELEASE_TITLE=$RELEASE_TITLE" >> $GITHUB_ENV
           echo "RELEASE_DESC=$RELEASE_DESC" >> $GITHUB_ENV
       - name: Update Release
-        uses: uses: andelf/nightly-release@main
+        uses: andelf/nightly-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
