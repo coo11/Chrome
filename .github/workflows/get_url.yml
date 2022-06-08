@@ -21,15 +21,15 @@ jobs:
             resp=$(curl -sX POST https://tools.google.com/service/update2 -H "Content-Type: application/xml"  -d "$body")
             regex="(https://dl\.google\.com[^\"]+).* run=\"([^\"]+).* Version=\"([^\"]+).* hash=\"([^\"]+)\" hash_sha256=\"([^\"]+)"
             [[ $resp =~ $regex ]] && echo ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > $1.txt && echo "${BASH_REMATCH[3]},$1:
-sha1: `sha12hex ${BASH_REMATCH[4]}`
-sha256:${BASH_REMATCH[5]}"
+            sha1: `sha12hex ${BASH_REMATCH[4]}`
+            sha256:${BASH_REMATCH[5]}"
           }
-          IFS=',' read -r -a info <<< "$(get_link x64 x64-stable-multi-chrome)"
+          IFS=',' read -r -a "info" <<< "$(get_link x64 x64-stable-multi-chrome)"
           RELEASE_TITLE=${info[0]}
           RELEASE_DESC="${info[1]}"
-          IFS=',' read -r -a info <<< "$(get_link x86 -multi-chrome)"
+          IFS=',' read -r -a "info" <<< "$(get_link x86 -multi-chrome)"
           RELEASE_DESC+="
-${info[1]}"
+          ${info[1]}"
           echo "RELEASE_TITLE=$RELEASE_TITLE" >> $GITHUB_ENV
           echo "RELEASE_DESC=$RELEASE_DESC" >> $GITHUB_ENV
       - name: Update Release
