@@ -41,7 +41,7 @@ jobs:
         with:
           tag_name: stable_latest
           prerelease: true
-          name: GOOGLE CHROME NIGHTLY CHECK
+          name: Offline Chrome installer nightly check
           body: ${{ env.RELEASE_DESC }}
           files: |
             x64.txt
