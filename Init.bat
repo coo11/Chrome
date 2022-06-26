@@ -23,14 +23,14 @@ EXIT
 
 :CHROME
 CD "%~DP0Utils\"
-FOR /F "tokens=1,* delims= " %%a in ('curl.exe -Lfs https://github.com/coo11/Chrome/releases/download/stable_lastest/x64.txt') DO SET URL=%%a
-curl -o install.exe %URL% && RD ..\Chrome-bin /S /Q >NUL 2>&1 & 7za e install.exe -aoa && 7za x chrome.7z -aoa && XCOPY Chrome-bin\* App /Y /E && RD Chrome-bin /S /Q & DEL install.exe chrome.7z /F /Q
+FOR /F "delims=" %%a in ('curl.exe -Lfs https://ghproxy.com/https://github.com/coo11/Chrome/releases/download/stable_latest/x64.txt') DO SET URL=%%a
+curl -o install.exe %URL% && RD ..\Chrome-bin /S /Q >NUL 2>&1 & 7za e install.exe -aoa && 7za x chrome.7z -aoa && MD ..\App >NUL 2>&1 & XCOPY Chrome-bin\* ..\App\ /Y /E && RD Chrome-bin /S /Q & DEL install.exe chrome.7z /F /Q
 PAUSE
 GOTO BACK
 
 :CHROMEPLUS
 CD "%~DP0Utils\"
-curl -Locp.zip "https://nightly.link/shuax/chrome_plus/workflows/build/main/windows_x64.zip" && 7za x cp.zip -aoa && move /Y version.dll ..\App\version.dll & DEL cp.zip /F /Q
+curl -Locp.zip "https://nightly.link/shuax/chrome_plus/workflows/build/main/windows_x64.zip" && 7za x cp.zip -aoa && MD ..\App >NUL 2>&1 & move /Y version.dll ..\App\version.dll & DEL cp.zip /F /Q
 PAUSE
 GOTO BACK
 
