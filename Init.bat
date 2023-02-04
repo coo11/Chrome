@@ -23,7 +23,7 @@ EXIT
 
 :CHROME
 CD "%~DP0Utils\"
-FOR /F "delims=" %%a in ('curl.exe -Lf https://ghproxy.com/https://github.com/coo11/Chrome/releases/download/stable_latest/x64.txt') DO SET URL=%%a
+::FOR /F "delims=" %%a in ('curl.exe -Lf https://ghproxy.com/https://github.com/coo11/Chrome/releases/download/stable_latest/x64.txt') DO SET URL=%%a
 curl -o install.7z https://ghproxy.com/https://github.com/coo11/Chrome/releases/download/stable_latest/Chrome_Portable.7z && RD ..\App /S /Q >NUL 2>&1 & 7za x install.7z -aoa -o..\ && DEL install.7z /F /Q
 PAUSE
 GOTO BACK
