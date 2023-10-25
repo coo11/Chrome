@@ -14,7 +14,7 @@ jobs:
       - name: Get URL
         run: |
           repack() {
-            curl -Lo chpp.bin $1 && 7z x chpp.bin && curl -o ch.bin $2 && 7z x ch.bin && 7z x chrome.7z && cp ./x64/App/* ./Chrome-bin && mv ./Chrome-bin ./App && 7z a -r -mx9 Chrome_Portable.7z ./App
+            curl -Lo chpp.bin $1 && 7z x chpp.bin && curl -o ch.bin $2 && 7z x ch.bin && 7z x chrome.7z && cp ./x64/App/* ./Chrome-bin && mv ./Chrome-bin ./App && 7z a -mx9 Chrome_Portable.7z ./App
           }
           processing(){
             chpp_resp=$(curl -s "https://api.github.com/repos/Bush2021/chrome_plus/releases/latest")
