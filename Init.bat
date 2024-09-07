@@ -7,7 +7,7 @@ TITLE Chrome Portable Initialazation
 :HEAD
 ECHO  ======================================================
 ECHO  1. 获取/更新 Chrome
-ECHO  2. 获取/更新 Chrome++
+ECHO  2. 获取/更新 Chrome++ （不适用）
 ECHO  ======================================================
 :: 选择菜单
 :: Use xcopy to retrieve the key press: https://stackoverflow.com/a/27257111/14168341
