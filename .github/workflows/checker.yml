@@ -18,7 +18,7 @@ jobs:
           }
           processing(){
             chpp_resp=$(curl -s "https://api.github.com/repos/Bush2021/chrome_plus/releases/latest")
-            echo test
+            echo test1
             chpp_url=$(echo "$chpp_resp" | grep "browser_download_url" | head -n 1 | awk -F "\"" '{print $4}')
             echo test2
             chpp_ver=$(echo "$chpp_resp" | grep "tag_name" | head -n 1 | awk -F "\"" '{print $4}')
@@ -29,6 +29,7 @@ jobs:
             regex="(https://dl\.google\.com[^\"]+).* run=\"([^\"]+).* Version=\"([^\"]+).* hash=\"([^\"]+)\" hash_sha256=\"([^\"]+)"
             [[ $resp =~ $regex ]] && repack $chpp_url ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > /dev/null 2>&1 && echo "CHROME VERSION: \`${BASH_REMATCH[3]}\`"
           }
+          echo $(processing x64 x64-stable-multi-chrome)
           RELEASE_DESC="## Stable x64
           $(processing x64 x64-stable-multi-chrome)"
           echo $RELEASE_DESC
