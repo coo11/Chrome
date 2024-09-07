@@ -29,11 +29,11 @@ jobs:
           processing x64 x64-stable-multi-chrome
           RELEASE_DESC="## Stable x64"
           # $(processing x64 x64-stable-multi-chrome)"
-          echo $RELEASE_DESC
+          # echo $RELEASE_DESC
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-          echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
-          echo "$RELEASE_DESC" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          # echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
+          # echo "$RELEASE_DESC" >> $GITHUB_ENV
+          # echo 'EOF' >> $GITHUB_ENV
       - name: Update Release
         uses: andelf/nightly-release@main
         env:
@@ -42,5 +42,5 @@ jobs:
           tag_name: stable_latest
           prerelease: true
           name: Chrome portable & Chrome++ inside
-          body: ${{ env.RELEASE_DESC }}
+          # body: ${{ env.RELEASE_DESC }}
           files: Chrome_Portable.7z
