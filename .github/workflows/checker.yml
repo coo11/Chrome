@@ -28,6 +28,8 @@ jobs:
           }
           RELEASE_DESC="## Stable x64
           $(processing x64 x64-stable-multi-chrome)"
+          echo $RELEASE_DESC
+          echo test
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
           echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
           echo "$RELEASE_DESC" >> $GITHUB_ENV
