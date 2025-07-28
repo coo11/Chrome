@@ -13,8 +13,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get URL
         run: |
-          set -x
-          set -e
           repack() {
             curl -Lo chpp.bin $1 && 7z x chpp.bin x64 && curl -o ch.bin $2 && 7z x ch.bin && 7z x chrome.7z && cp ./x64/App/* ./Chrome-bin && mv ./Chrome-bin ./App && 7z a -mx9 Chrome_Portable.7z ./App
           }
@@ -31,9 +29,11 @@ jobs:
           RELEASE_DESC="## Stable x64
           $(processing x64 x64-stable-multi-chrome)"
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-          echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
-          echo "$RELEASE_DESC" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          {
+            echo 'RELEASE_DESC<<EOF'
+            echo "$RELEASE_DESC"
+            echo 'EOF'
+          } >> $GITHUB_ENV
       - name: Update Release
         uses: andelf/nightly-release@main
         env:
