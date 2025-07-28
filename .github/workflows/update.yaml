@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
   schedule:
     - cron: "0 0 1,15 * *"
@@ -56,14 +56,14 @@ jobs:
             fi
             }
 
-            # 生成发布描述
-            RELEASE_DESC="## Stable x64
-            $(processing x64 x64-stable-multi-chrome)"
+          # 生成发布描述
+          RELEASE_DESC="## Stable x64
+          $(processing x64 x64-stable-multi-chrome)"
 
-            # 多行字符串写入环境变量
-            echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
-            echo "$RELEASE_DESC" >> $GITHUB_ENV
-            echo 'EOF' >> $GITHUB_ENV
+          # 多行字符串写入环境变量
+          echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
+          echo "$RELEASE_DESC" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Update Release
         uses: andelf/nightly-release@main
         env:
