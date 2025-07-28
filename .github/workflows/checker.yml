@@ -29,14 +29,13 @@ jobs:
             regex="(https://dl\.google\.com[^\"]+).* run=\"([^\"]+).* Version=\"([^\"]+).* hash=\"([^\"]+)\" hash_sha256=\"([^\"]+)"
             [[ $resp =~ $regex ]] && repack $chpp_url ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > /dev/null 2>&1 && echo "CHROME VERSION: \`${BASH_REMATCH[3]}\`"
           }
-          RELEASE_DESC="## Stable x64
-          $(processing x64 x64-stable-multi-chrome)"
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-          {
-            echo 'RELEASE_DESC<<EOF'
-            echo "$RELEASE_DESC"
-            echo 'EOF'
-          } >> $GITHUB_ENV
+          RELEASE_DESC="## Stable x64"
+          RELEASE_DESC="$RELEASE_DESC
+$(processing x64 x64-stable-multi-chrome)"
+          echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
+          echo "$RELEASE_DESC" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Update Release
         uses: andelf/nightly-release@main
         env:
