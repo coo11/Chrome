@@ -32,7 +32,7 @@ jobs:
           # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
           RELEASE_DESC="## Stable x64"
           RELEASE_DESC="$RELEASE_DESC
-$(processing x64 x64-stable-multi-chrome)"
+          $(processing x64 x64-stable-multi-chrome)"
           echo 'RELEASE_DESC<<EOF' >> $GITHUB_ENV
           echo "$RELEASE_DESC" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
