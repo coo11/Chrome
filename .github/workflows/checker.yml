@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get URL
         run: |
           repack() {
@@ -21,7 +21,7 @@ jobs:
             chpp_url=$(echo "$chpp_resp" | grep "browser_download_url" | head -n 1 | awk -F "\"" '{print $4}')
             chpp_ver=$(echo "$chpp_resp" | grep "tag_name" | head -n 1 | awk -F "\"" '{print $4}')
             echo "CHROME_PLUS VERSION: \`$chpp_ver\`"
-            body='<?xml version="1.0" encoding="UTF-8"?><request protocol="3.0" version="1.3.23.9" shell_version="1.3.21.103" ismachine="0" sessionid="{3597644B-2952-4F92-AE55-D315F45F80A5}" installsource="ondemandcheckforupdate" requestid="{CD7523AD-A40D-49F4-AEEF-8C114B804658}" dedup="cr"><hw sse="1" sse2="1" sse3="1" ssse3="1" sse41="1" sse42="1" avx="1" physmemory="12582912" /><os platform="win" version="10.0" arch="'$1'" /><app appid="{8A69D345-D564-463C-AFF1-A69D9E530F96}" ap="'$2'"><updatecheck /></app></request>'
+            body='<?xml version="1.0" encoding="UTF-8"?><request protocol="3.0" version="1.3.23.9" shell_version="1.3.21.103" ismachine="0" sessionid="{3597644B-2952-4F92-AE55-D315F45F80A5}" installsource="ondemandcheckforupdate" requestid="{CD7523AD-A40D-49F4-AEEF-8C114B804658}" dedup="cr"><hw sse="1" sse2="1" sse3="1" ssse3="1" sse41="1" sse42="1" avx="1" physmemory="12582912" /><os platform="win" version="10.0" arch="$1" /><app appid="{8A69D345-D564-463C-AFF1-A69D9E530F96}" ap="$2"><updatecheck /></app></request>'
             resp=$(curl -sX POST https://tools.google.com/service/update2 -H "Content-Type: application/xml"  -d "$body")
             regex="(https://dl\.google\.com[^\"]+).* run=\"([^\"]+).* Version=\"([^\"]+).* hash=\"([^\"]+)\" hash_sha256=\"([^\"]+)"
             [[ $resp =~ $regex ]] && repack $chpp_url ${BASH_REMATCH[1]}${BASH_REMATCH[2]} > /dev/null 2>&1 && echo "CHROME VERSION: \`${BASH_REMATCH[3]}\`"
@@ -38,7 +38,43 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: stable_latest
-          prerelease: true
+          prerelease: false
           name: Chrome portable & Chrome++ inside
           body: ${{ env.RELEASE_DESC }}
           files: Chrome_Portable.7z
+
+  update-engines:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Read engines.json and update importEngines.js
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const enginesPath = path.join('SearchEngine', 'engines.json');
+          const jsPath = path.join('SearchEngine', 'importEngines.js');
+          const engines = JSON.parse(fs.readFileSync(enginesPath, 'utf8'));
+          let js = fs.readFileSync(jsPath, 'utf8');
+          js = js.replace(
+            /const engines = \[[\s\S]*?\];/,
+            'const engines = ' + JSON.stringify(engines, null, 2) + ';'
+          );
+          fs.writeFileSync(jsPath, js);
+          EOF
+
+      - name: Commit and push to output branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B output
+          git mv SearchEngine/importEngines.js importEngines.js
+          git commit -m "Update engines from engines.json [bot]" || echo "No changes to commit"
+          git push -f origin output

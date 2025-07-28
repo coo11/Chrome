@@ -157,8 +157,13 @@ IF "%ERRORLEVEL%"=="1" (
     )
     REM !! https://chromium.googlesource.com/chromium/src.git/+/refs/tags/122.0.6224.0/components/search_engines/keyword_table.h#77
     :: Web Data version below 122 will lack of column "featured_by_policy".
-    IF !WDVER! GEQ 112 (
+    IF !WDVER! GEQ 122 (
         >NUL FIND /I "featured_by_policy" "%STD%" || sqlite3.exe -cmd "ALTER TABLE keywords ADD COLUMN featured_by_policy INTEGER DEFAULT 0" "%TFILE:\=/%" .exit 1>NUL 2>&1
+    )
+    REM !! https://chromium.googlesource.com/chromium/src.git/+/refs/tags/137.0.7151.138/components/search_engines/keyword_table.h#86
+    :: Web Data version below 137 will lack of column "url_hash".
+    IF !WDVER! GEQ 137 (
+        >NUL FIND /I "featured_by_policy" "%STD%" || sqlite3.exe -cmd "ALTER TABLE keywords ADD COLUMN url_hash BLOB" "%TFILE:\=/%" .exit 1>NUL 2>&1
     )
     
     IF "%~3"=="7" (
